@@ -4,6 +4,8 @@ import express from 'express';
 import cors from 'cors';
 import path from 'path';
 import { BlackjackGame, GameResult } from './game';
+import { applyCheat, type CheatMode } from './cheatEngine';
+
 
 const app = express();
 const port = 3000;
@@ -63,6 +65,8 @@ function finalizeGameIfNeeded(session: PlayerSession, game: BlackjackGame) {
 
 
 app.post('/api/start', (req, res) => {
+    const cheatMode = (req.body?.cheatMode as CheatMode | undefined) ?? 'none';
+
     const bet = req.body?.bet || 50;
     let sessionId = req.body?.sessionId;
 
@@ -89,7 +93,18 @@ app.post('/api/start', (req, res) => {
 
     const gameId = Math.random().toString(36).substring(7);
     const game = new BlackjackGame(bet);
+
+    // Applique la triche (si demandée) juste après la création.
+    applyCheat(
+        cheatMode,
+        game.playerHand,
+        game.dealerHand,
+        bet,
+        sessionId
+    );
+
     games.set(gameId, game);
+
 
     session.games.push(game);
     session.balance -= bet;
@@ -160,8 +175,10 @@ app.post('/api/loan/confirm', (req, res) => {
 
     if (decision === true) {
         const principal = 1000;
+
+        // Accepter le prêt ne doit jamais "endetter" le joueur.
+        // Ici, accepter = +principal, donc on garde une garde-fou par sécurité.
         const newBalance = session.balance + principal;
-        // Si le joueur n’a pas assez pour "absorber" le prêt (cas limite), on refuse.
         if (newBalance < 0) {
             return res.status(400).json({ error: 'Solde insuffisant' });
         }
@@ -172,17 +189,13 @@ app.post('/api/loan/confirm', (req, res) => {
         return res.json({ balance: session.balance, loan: session.loan });
     }
 
-    if (decision === false) {
-        const amount = 10000;
-        const newBalance = session.balance - amount;
-        // Refuser si ça passe le solde dans le négatif.
-        if (newBalance < 0) {
-            return res.status(400).json({ error: 'Solde insuffisant' });
-        }
 
-        session.balance = newBalance;
+    if (decision === false) {
+        // Refus : annule le prêt, donc aucun paiement / prélèvement.
+        // (Le bouton sert juste à accepter/refuser la demande de prêt.)
         return res.json({ balance: session.balance, loan: session.loan });
     }
+
 
 
     return res.status(400).json({ error: 'Decision invalide' });

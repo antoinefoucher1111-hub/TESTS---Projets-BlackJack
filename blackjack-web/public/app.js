@@ -111,11 +111,14 @@ btnNewGame.addEventListener('click', () => {
 
 async function startNewGame(bet) {
     try {
+        const cheatMode = localStorage.getItem('blackjack_cheatMode') || 'none';
+
         const response = await fetch('/api/start', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ bet, sessionId: currentSessionId })
+            body: JSON.stringify({ bet, sessionId: currentSessionId, cheatMode })
         });
+
         const data = await response.json();
 
         if (!response.ok) {

@@ -103,6 +103,8 @@ export class BlackjackGame {
     public hit() {
         if (this.status !== 'playing') return;
 
+        // triche optionnelle : si un endpoint backend force un comportement,
+        // on laisse le backend décider via l’état des cartes.
         this.playerHand.push(this.drawCard());
         const score = this.calculateScore(this.playerHand);
 
@@ -111,6 +113,7 @@ export class BlackjackGame {
             this.status = 'dealerWon';
         }
     }
+
 
     public stand() {
         if (this.status !== 'playing') return;
