@@ -22,8 +22,8 @@ interface PlayerSession {
     results: GameResult[];
     balance: number;
 
-    consecutiveWins: number;
-    penaltyRoundsRemaining: number; // nombre de prélèvements restants (50€) => max 5
+    // bonus/malus supprimés: aucun tracking spécifique requis
+
 
     loan: LoanState;
     totalGamesSinceLoan: number; // parties jouées depuis souscription
@@ -52,25 +52,7 @@ function finalizeGameIfNeeded(session: PlayerSession, game: BlackjackGame) {
     session.results.push(result);
     session.balance += state.winAmount;
 
-    // Tracking 2 victoires d'affilée
-    if (result.result === 'playerWon') {
-        session.consecutiveWins += 1;
-    } else {
-        session.consecutiveWins = 0;
-    }
 
-    if (session.consecutiveWins >= 2) {
-        // déclencher la séquence une fois (et pas en boucle)
-        if (session.penaltyRoundsRemaining === 0) {
-            // “aléatoirement” => probabilité de déclenchement
-            const roll = Math.random();
-            if (roll < 0.5) {
-                session.penaltyRoundsRemaining = 5;
-            }
-        }
-        // garde un compteur à jour sans relancer trop souvent
-        session.consecutiveWins = 0;
-    }
 
     // Tracking remboursement prêt : on compte chaque partie finalisée
     if (session.loan.subscribed) {
@@ -91,8 +73,7 @@ app.post('/api/start', (req, res) => {
             results: [],
             balance: 1000,
 
-            consecutiveWins: 0,
-            penaltyRoundsRemaining: 0,
+
 
             loan: { subscribed: false, principal: 0 },
             totalGamesSinceLoan: 0
@@ -179,7 +160,13 @@ app.post('/api/loan/confirm', (req, res) => {
 
     if (decision === true) {
         const principal = 1000;
-        session.balance += principal;
+        const newBalance = session.balance + principal;
+        // Si le joueur n’a pas assez pour "absorber" le prêt (cas limite), on refuse.
+        if (newBalance < 0) {
+            return res.status(400).json({ error: 'Solde insuffisant' });
+        }
+
+        session.balance = newBalance;
         session.loan = { subscribed: true, principal };
         session.totalGamesSinceLoan = 0;
         return res.json({ balance: session.balance, loan: session.loan });
@@ -187,9 +174,16 @@ app.post('/api/loan/confirm', (req, res) => {
 
     if (decision === false) {
         const amount = 10000;
-        session.balance -= amount;
+        const newBalance = session.balance - amount;
+        // Refuser si ça passe le solde dans le négatif.
+        if (newBalance < 0) {
+            return res.status(400).json({ error: 'Solde insuffisant' });
+        }
+
+        session.balance = newBalance;
         return res.json({ balance: session.balance, loan: session.loan });
     }
+
 
     return res.status(400).json({ error: 'Decision invalide' });
 });
@@ -214,19 +208,14 @@ app.get('/api/stats/:sessionId', (req, res) => {
     res.json(stats);
 });
 
-// Pénalité périodique toutes les 10 secondes
-setInterval(() => {
-    for (const session of sessions.values()) {
-        if (session.penaltyRoundsRemaining > 0) {
-            session.balance -= 50;
-            session.penaltyRoundsRemaining -= 1;
-            // Règle (mention dans erreurtrouve.md) : solde ne doit pas passer sous 0
-            if (session.balance < 0) session.balance = 0;
-        }
-    }
-}, 10_000);
+
+
+
+
 
 app.listen(port, () => {
     console.log(`🚀 Serveur Blackjack lancé sur http://localhost:${port}`);
 });
+
+
 

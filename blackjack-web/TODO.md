@@ -1,12 +1,9 @@
-# TODO - Blackjack (Prêts & Pénalités)
+# TODO - Blackjack
 
-- [ ] Comprendre où brancher la logique de prêt (popup client + endpoint serveur)
-- [ ] Modifier `public/app.js` : popup confirmation avant appel de prêt
-- [ ] Modifier `src/server.ts` : remplacer `/api/loan` par un endpoint acceptant la décision
-- [ ] Modifier `src/server.ts` : ajouter tracking `consecutiveWins`, `penaltyRoundsRemaining` et application périodique -50
-- [ ] Ajouter rafraîchissement solde côté client (poll sur `/api/stats/:sessionId`) pour refléter prélèvements auto
-- [ ] Ajouter logique remboursement : après 10 parties jouées, si prêt souscrit => retirer (capital + intérêt 25%)
-- [ ] Ajouter tests UI/UX (Playwright) pour les popups “Oui/Non” (via mock confirm si possible)
-
-- [ ] Vérifier compilation et lancer les tests
+- [ ] 1) Rendre le bouton « Prêt » visible en permanence (h24)
+- [ ] 2) Corriger les textes/confirmations OK/Annuler côté front pour qu’ils correspondent exactement au serveur
+- [ ] 3) Implémenter bonus « 5 défaites d’affilée » et malus « 3 victoires d’affilée » côté serveur
+- [ ] 4) Supprimer/neutraliser la règle actuelle (2 victoires -> penaltyRoundsRemaining) pour éviter les doubles pénalités
+- [ ] 5) Mettre à jour l’UI pour afficher un message de bonus/malus après une partie
+- [ ] 6) Lancer tests (unitaires + Playwright) et corriger d’éventuels échecs
 

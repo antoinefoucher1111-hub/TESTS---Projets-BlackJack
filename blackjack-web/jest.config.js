@@ -8,4 +8,6 @@ module.exports = {
     '**/src/**/game.test.fixed.ts'
   ]
 };
+// Intentionally no trailing config key in package.json.
+
 

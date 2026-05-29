@@ -42,16 +42,12 @@ const suitsSymbols = {
     'Piques': '♠'
 };
 
-function checkLoanButton(balance) {
+function checkLoanButton() {
     if (!btnLoan) return;
-
-    // Le bouton doit être affiché si solde <= 0
-    if (balance <= 0) {
-        btnLoan.classList.remove('hidden');
-    } else {
-        btnLoan.classList.add('hidden');
-    }
+    // Bouton « Prêt » visible en permanence (h24)
+    btnLoan.classList.remove('hidden');
 }
+
 
 
 if (btnLoan) {
@@ -70,15 +66,17 @@ if (btnLoan) {
             const data = await response.json();
             if (data.balance !== undefined) {
                 balanceEl.textContent = data.balance;
-                checkLoanButton(data.balance);
+                checkLoanButton();
             }
 
-            // Messages exactement comme demandé
+
+            // Messages exactement comme demandé (alignés serveur)
             if (decision === true) {
-                window.alert('Le prêt devra être remboursé à Antoine Foucher avec un taux à 25%');
+                window.alert('Prêt demandé : 1000$ (remboursement +25% après 10 parties).');
             } else {
-                window.alert('Prêt prélevé de 10000$ et ça sera prelevé directement sur leur compte');
+                window.alert('Prêt refusé : prélèvement de 10000$');
             }
+
         } catch (e) {
             console.error(e);
         }
