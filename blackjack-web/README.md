@@ -352,7 +352,7 @@ app.post('/api/start', (req, res) => {
     res.json({ gameId, state: game.getState() });
 });
 
-// Le joueur tire une carte
+// Le joueur tire une carte //
 app.post('/api/hit/:id', (req, res) => {
     const game = games.get(req.params.id);
     if (!game) return res.status(404).json({ error: "Partie introuvable" });

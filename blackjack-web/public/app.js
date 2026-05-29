@@ -180,7 +180,7 @@ function showMessage(status) {
         messageBoard.textContent = "Vous avez gagné ! 🎉";
         messageBoard.classList.add('win');
     } else if (status === 'dealerWon') {
-        messageBoard.textContent = "Le croupier a gagné. 💸";
+        messageBoard.textContent = "Le croupier a gagné.  💸";
         messageBoard.classList.add('lose');
     } else if (status === 'tie') {
         messageBoard.textContent = "Égalité ! 🤝";
