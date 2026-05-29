@@ -11,13 +11,24 @@ export interface Card {
 
 export type GameStatus = 'playing' | 'playerWon' | 'dealerWon' | 'tie';
 
+export interface GameResult {
+    bet: number;
+    result: GameStatus;
+    winAmount: number;
+    timestamp: number;
+    playerScore: number;
+    dealerScore: number;
+}
+
 export class BlackjackGame {
     public deck: Card[] = [];
     public playerHand: Card[] = [];
     public dealerHand: Card[] = [];
     public status: GameStatus = 'playing';
+    public bet: number = 0;
 
-    constructor() {
+    constructor(bet: number = 0) {
+        this.bet = bet;
         this.initializeDeck();
         this.dealInitialCards();
     }
@@ -147,7 +158,32 @@ export class BlackjackGame {
             dealerHand: this.dealerHand,
             playerScore: this.calculateScore(this.playerHand),
             dealerScore: this.calculateScore(this.dealerHand),
-            status: this.status
+            status: this.status,
+            bet: this.bet,
+            winAmount: this.calculateWinAmount()
         };
+    }
+
+    // Calcule le montant gagné/perdu
+    private calculateWinAmount(): number {
+        if (this.status === 'playing') return 0;
+        
+        const playerScore = this.calculateScore(this.playerHand);
+        const dealerScore = this.calculateScore(this.dealerHand);
+
+        if (this.status === 'playerWon') {
+            // Blackjack (21 en 2 cartes) = 1.5x la mise
+            if (this.playerHand.length === 2 && playerScore === 21) {
+                return Math.round(this.bet * 1.5);
+            }
+            // Win normal = 2x la mise
+            return this.bet * 2;
+        } else if (this.status === 'tie') {
+            // Égalité = remboursement de la mise
+            return this.bet;
+        } else {
+            // Perte = 0
+            return 0;
+        }
     }
 }

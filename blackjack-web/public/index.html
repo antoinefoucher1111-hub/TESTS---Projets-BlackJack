@@ -7,27 +7,106 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="game-container">
-        <h1>♠️ Blackjack ♣️</h1>
-        
-        <div class="table">
-            <div class="hand-section">
-                <h2>Croupier (Score: <span id="dealer-score">?</span>)</h2>
-                <div id="dealer-cards" class="cards-container"></div>
-            </div>
+    <div class="main-layout">
+        <!-- Zone de jeu à gauche -->
+        <div class="game-section">
+            <div class="game-container">
+                <h1>♠️ Blackjack ♣️</h1>
+                
+                <div class="balance-display">
+                    Solde: <span id="balance">1000</span>€
+                </div>
 
-            <div id="message-board" class="message hidden"></div>
+                <div id="betting-section" class="betting-section">
+                    <h3>Nouvelle Partie</h3>
+                    <div class="bet-controls">
+                        <input type="number" id="bet-input" min="10" max="5000" value="50" placeholder="Mettez votre mise">
+                        <button id="btn-place-bet">Valider Mise</button>
+                    </div>
+                    <div class="quick-bets">
+                        <button class="quick-bet" data-bet="25">25€</button>
+                        <button class="quick-bet" data-bet="50">50€</button>
+                        <button class="quick-bet" data-bet="100">100€</button>
+                        <button class="quick-bet" data-bet="500">500€</button>
+                    </div>
+                </div>
 
-            <div class="hand-section">
-                <h2>Joueur (Score: <span id="player-score">0</span>)</h2>
-                <div id="player-cards" class="cards-container"></div>
+                <div id="game-section" class="game-section-hidden">
+                    <div class="table">
+                        <div class="hand-section">
+                            <h2>Croupier (Score: <span id="dealer-score">?</span>)</h2>
+                            <div id="dealer-cards" class="cards-container"></div>
+                        </div>
+
+                        <div id="message-board" class="message hidden"></div>
+
+                        <div class="hand-section">
+                            <h2>Joueur (Score: <span id="player-score">0</span>)</h2>
+                            <div id="player-cards" class="cards-container"></div>
+                        </div>
+                    </div>
+
+                    <div class="current-bet-info">
+                        Mise: <span id="current-bet">50</span>€ | Gain potentiel: <span id="potential-win">0</span>€
+                    </div>
+
+                    <div class="controls">
+                        <button id="btn-hit" disabled>Tirer (Hit)</button>
+                        <button id="btn-stand" disabled>Rester (Stand)</button>
+                        <button id="btn-new-game">Nouvelle Partie</button>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="controls">
-            <button id="btn-hit" disabled>Tirer (Hit)</button>
-            <button id="btn-stand" disabled>Rester (Stand)</button>
-            <button id="btn-new-game">Nouvelle Partie</button>
+        <!-- Panneau de statistiques à droite -->
+        <div class="stats-section">
+            <div class="stats-container">
+                <h2>📊 Statistiques</h2>
+                
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-label">Victoires</div>
+                        <div class="stat-value" id="stat-wins">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Défaites</div>
+                        <div class="stat-value" id="stat-losses">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Égalités</div>
+                        <div class="stat-value" id="stat-ties">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Taux de gain</div>
+                        <div class="stat-value" id="stat-winrate">0%</div>
+                    </div>
+                </div>
+
+                <div class="total-stats">
+                    <div class="stat-row">
+                        <span>Parties jouées:</span>
+                        <span id="stat-total-games">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Total misé:</span>
+                        <span id="stat-total-bet">0€</span>
+                    </div>
+                    <div class="stat-row">
+                        <span>Total gagné:</span>
+                        <span id="stat-total-won">0€</span>
+                    </div>
+                    <div class="stat-row profit">
+                        <span>Bénéfice net:</span>
+                        <span id="stat-profit">0€</span>
+                    </div>
+                </div>
+
+                <h3>🎲 Historique des parties</h3>
+                <div id="results-history" class="results-history">
+                    <div class="no-results">Aucune partie encore</div>
+                </div>
+            </div>
         </div>
     </div>
 
