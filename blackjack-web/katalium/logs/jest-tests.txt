@@ -1,0 +1,18 @@
+2026-05-29T10:18:03.207Z - Start test: numeric cards
+2026-05-29T10:18:03.210Z - Scores: 14
+2026-05-29T10:18:03.212Z - End test: numeric cards
+2026-05-29T10:18:03.215Z - Start test: blackjack detection
+2026-05-29T10:18:03.215Z - Blackjack score: 21
+2026-05-29T10:18:03.217Z - End test: blackjack detection
+2026-05-29T11:41:59.102Z - Start test: numeric cards
+2026-05-29T11:41:59.105Z - Scores: 14
+2026-05-29T11:41:59.107Z - End test: numeric cards
+2026-05-29T11:41:59.109Z - Start test: blackjack detection
+2026-05-29T11:41:59.110Z - Blackjack score: 21
+2026-05-29T11:41:59.111Z - End test: blackjack detection
+2026-05-29T12:54:53.495Z - Start test: numeric cards
+2026-05-29T12:54:53.497Z - Scores: 14
+2026-05-29T12:54:53.498Z - End test: numeric cards
+2026-05-29T12:54:53.501Z - Start test: blackjack detection
+2026-05-29T12:54:53.501Z - Blackjack score: 21
+2026-05-29T12:54:53.502Z - End test: blackjack detection

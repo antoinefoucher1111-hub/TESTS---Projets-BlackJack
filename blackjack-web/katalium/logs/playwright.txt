@@ -1,0 +1,38 @@
+2026-05-29T10:18:20.792Z - Starting playwright test: dashboard visibility
+2026-05-29T10:18:21.291Z - dashboard modal visible
+2026-05-29T10:18:21.417Z - Checking TU-03 label
+2026-05-29T10:18:21.636Z - TU-03 label found
+2026-05-29T12:20:03.486Z - Starting playwright test: dashboard visibility
+2026-05-29T12:20:03.740Z - dashboard modal visible
+2026-05-29T12:20:03.876Z - Checking TU-03 label
+2026-05-29T12:20:04.140Z - TU-03 label found
+2026-05-29T12:20:04.264Z - Checking error popup on Hit
+2026-05-29T12:20:04.719Z - User dialog default message: Action: hit
+
+Remarques-tu un problème dans la logique / l’affichage ? (oui/non)
+2026-05-29T12:20:04.913Z - Checking error popup on text selection
+2026-05-29T12:20:05.099Z - Selection dialog message: Action: selection
+
+J’ai détecté potentiellement une incohérence: 
+- Hand(s) manquantes ou invalides dans state
+- playerScore n’est pas un nombre
+- dealerScore n’est pas un nombre alors que status n’est pas playing
+- winAmount manquant/invalid alors que la partie est terminée
+
+Remarques-tu un problème ? (oui/non)
+2026-05-29T12:35:05.889Z - Checking error popup on Hit
+2026-05-29T12:35:06.263Z - User dialog default message: Action: hit
+
+Remarques-tu un problème dans la logique / l’affichage ? (oui/non)
+2026-05-29T12:35:06.414Z - Checking error popup on text selection
+2026-05-29T12:35:06.536Z - Selection dialog message: Action: selection
+
+J’ai détecté potentiellement une incohérence: 
+- Hand(s) manquantes ou invalides dans state
+- playerScore n’est pas un nombre
+- dealerScore n’est pas un nombre alors que status n’est pas playing
+- winAmount manquant/invalid alors que la partie est terminée
+
+Remarques-tu un problème ? (oui/non)
+2026-05-29T12:40:46.597Z - Checking basic game load and bet
+2026-05-29T13:00:23.617Z - Checking basic game load and bet

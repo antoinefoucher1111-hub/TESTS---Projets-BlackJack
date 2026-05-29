@@ -33,30 +33,27 @@ export class BlackjackGame {
         this.dealInitialCards();
     }
 
-    // Crée et mélange le paquet de 52 cartes
     private initializeDeck() {
         const suits: Suit[] = ['Cœurs', 'Carreaux', 'Trèfles', 'Piques'];
         const ranks: Rank[] = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
-        
+
         for (const suit of suits) {
             for (const rank of ranks) {
                 this.deck.push({ suit, rank });
             }
         }
-        // Mélange de Fisher-Yates
+
         for (let i = this.deck.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [this.deck[i], this.deck[j]] = [this.deck[j], this.deck[i]];
         }
     }
 
-    // Distribution initiale : 2 cartes chacun
     private dealInitialCards() {
         this.playerHand.push(this.drawCard());
         this.dealerHand.push(this.drawCard());
         this.playerHand.push(this.drawCard());
-        
-        // La deuxième carte du croupier est cachée
+
         const hiddenCard = this.drawCard();
         hiddenCard.hidden = true;
         this.dealerHand.push(hiddenCard);
@@ -68,13 +65,12 @@ export class BlackjackGame {
         return this.deck.pop()!;
     }
 
-    // Calcule le score d'une main en gérant la valeur de l'As (1 ou 11)
     public calculateScore(hand: Card[]): number {
         let score = 0;
         let aces = 0;
 
         for (const card of hand) {
-            if (card.hidden) continue; // On ne compte pas la carte cachée
+            if (card.hidden) continue;
 
             if (['J', 'Q', 'K'].includes(card.rank)) {
                 score += 10;
@@ -82,11 +78,10 @@ export class BlackjackGame {
                 score += 11;
                 aces += 1;
             } else {
-                score += parseInt(card.rank);
+                score += parseInt(card.rank, 10);
             }
         }
 
-        // Réduction de la valeur des As si le score dépasse 21
         while (score > 21 && aces > 0) {
             score -= 10;
             aces -= 1;
@@ -97,15 +92,14 @@ export class BlackjackGame {
 
     private checkBlackjack() {
         const playerScore = this.calculateScore(this.playerHand);
-        const dealerScore = this.calculateScore(this.dealerHand.map(c => ({...c, hidden: false})));
-        
+        const dealerScore = this.calculateScore(this.dealerHand.map(c => ({ ...c, hidden: false })));
+
         if (playerScore === 21) {
             this.revealDealerCard();
             this.status = dealerScore === 21 ? 'tie' : 'playerWon';
         }
     }
 
-    // Le joueur tire une carte (Hit)
     public hit() {
         if (this.status !== 'playing') return;
 
@@ -114,17 +108,15 @@ export class BlackjackGame {
 
         if (score > 21) {
             this.revealDealerCard();
-            this.status = 'dealerWon'; // Le joueur a sauté (Bust)
+            this.status = 'dealerWon';
         }
     }
 
-    // Le joueur s'arrête, le croupier joue (Stand)
     public stand() {
         if (this.status !== 'playing') return;
 
         this.revealDealerCard();
-        
-        // Le croupier tire jusqu'à avoir au moins 17
+
         while (this.calculateScore(this.dealerHand) < 17) {
             this.dealerHand.push(this.drawCard());
         }
@@ -151,7 +143,6 @@ export class BlackjackGame {
         }
     }
 
-    // Renvoie l'état du jeu pour le frontend
     public getState() {
         return {
             playerHand: this.playerHand,
@@ -164,26 +155,25 @@ export class BlackjackGame {
         };
     }
 
-    // Calcule le montant gagné/perdu
     private calculateWinAmount(): number {
         if (this.status === 'playing') return 0;
-        
+
         const playerScore = this.calculateScore(this.playerHand);
-        const dealerScore = this.calculateScore(this.dealerHand);
 
         if (this.status === 'playerWon') {
-            // Blackjack (21 en 2 cartes) = 1.5x la mise
+            // Blackjack naturel : 2 cartes et score 21 => 2.5x (mise récupérée + 1.5x profit)
             if (this.playerHand.length === 2 && playerScore === 21) {
-                return Math.round(this.bet * 1.5);
+                return Math.round(this.bet * 2.5);
             }
-            // Win normal = 2x la mise
             return this.bet * 2;
-        } else if (this.status === 'tie') {
-            // Égalité = remboursement de la mise
-            return this.bet;
-        } else {
-            // Perte = 0
-            return 0;
         }
+
+        if (this.status === 'tie') {
+            return this.bet;
+        }
+
+        // dealerWon => 0
+        return 0;
     }
 }
+

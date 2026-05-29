@@ -8,19 +8,21 @@
 </head>
 <body>
     <div class="main-layout">
-        <!-- Zone de jeu à gauche -->
         <div class="game-section">
             <div class="game-container">
-                <h1>♠️ Blackjack ♣️</h1>
-                
+                <div class="top-bar">
+                    <h1>♠️ Blackjack ♣️</h1>
+                </div>
+
                 <div class="balance-display">
                     Solde: <span id="balance">1000</span>€
+                    <button id="btn-loan" class="hidden" style="margin-left: 10px; padding: 5px 10px; background-color: #f39c12; color: white; border: none; border-radius: 4px; cursor: pointer;">Demander un prêt (500€)</button>
                 </div>
 
                 <div id="betting-section" class="betting-section">
                     <h3>Nouvelle Partie</h3>
                     <div class="bet-controls">
-                        <input type="number" id="bet-input" min="10" max="5000" value="50" placeholder="Mettez votre mise">
+                        <input type="number" id="bet-input" min="10" max="5000" value="50" placeholder="Mise">
                         <button id="btn-place-bet">Valider Mise</button>
                     </div>
                     <div class="quick-bets">
@@ -59,11 +61,10 @@
             </div>
         </div>
 
-        <!-- Panneau de statistiques à droite -->
         <div class="stats-section">
             <div class="stats-container">
                 <h2>📊 Statistiques</h2>
-                
+
                 <div class="stats-grid">
                     <div class="stat-box">
                         <div class="stat-label">Victoires</div>

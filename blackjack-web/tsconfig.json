@@ -3,10 +3,20 @@
     "target": "es2016",
     "module": "commonjs",
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": "./",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   }
+  ,
+  "exclude": [
+    "node_modules",
+    "katalium",
+    "tests",
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "playwright-report",
+    "playwright-report/**"
+  ]
 }
