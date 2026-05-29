@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeu de Blackjack</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <h1>♠️ Blackjack ♣️</h1>
+        
+        <div class="table">
+            <div class="hand-section">
+                <h2>Croupier (Score: <span id="dealer-score">?</span>)</h2>
+                <div id="dealer-cards" class="cards-container"></div>
+            </div>
+
+            <div id="message-board" class="message hidden"></div>
+
+            <div class="hand-section">
+                <h2>Joueur (Score: <span id="player-score">0</span>)</h2>
+                <div id="player-cards" class="cards-container"></div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button id="btn-hit" disabled>Tirer (Hit)</button>
+            <button id="btn-stand" disabled>Rester (Stand)</button>
+            <button id="btn-new-game">Nouvelle Partie</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
