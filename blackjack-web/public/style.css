@@ -66,12 +66,37 @@ h1 {
 .red { color: #e74c3c; }
 .black { color: #2c3e50; }
 
+.forced-cards {
+    margin: 10px 0 20px;
+    padding: 10px;
+    background: rgba(0,0,0,0.18);
+    border-radius: 10px;
+    text-align: left;
+}
+
+#forced-cards-input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    box-sizing: border-box;
+    margin-top: 8px;
+}
+
+.forced-cards .hint {
+    font-size: 0.95rem;
+    opacity: 0.9;
+    margin-top: 6px;
+}
+
 .controls {
     margin-top: 20px;
     display: flex;
     justify-content: center;
     gap: 15px;
 }
+
 
 button {
     padding: 10px 20px;
@@ -109,3 +134,5 @@ button:disabled {
 .message.win { background: rgba(46, 204, 113, 0.8); }
 .message.lose { background: rgba(231, 76, 60, 0.8); }
 .message.tie { background: rgba(241, 196, 15, 0.8); color: black;}
+.message.error { background: rgba(231, 76, 60, 0.9); color: white;}
+

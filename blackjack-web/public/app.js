@@ -12,6 +12,27 @@ const messageBoard = document.getElementById('message-board');
 const btnHit = document.getElementById('btn-hit');
 const btnStand = document.getElementById('btn-stand');
 const btnNewGame = document.getElementById('btn-new-game');
+const forcedCardsInput = document.getElementById('forced-cards-input');
+
+const forcedCardsStorageKey = 'blackjack_forced_cards_input';
+if (forcedCardsInput) {
+    try {
+        forcedCardsInput.value = localStorage.getItem(forcedCardsStorageKey) ?? '';
+    } catch (e) {
+        // ignore
+    }
+
+    forcedCardsInput.addEventListener('input', () => {
+        try {
+            localStorage.setItem(forcedCardsStorageKey, forcedCardsInput.value);
+        } catch (e) {
+            // ignore
+        }
+    });
+}
+
+
+
 
 // Symboles pour l'affichage
 const suitsSymbols = {
@@ -25,11 +46,32 @@ const suitsSymbols = {
 
 async function startNewGame() {
     try {
-        const response = await fetch('/api/start', { method: 'POST' });
+        const forcedCardsText = forcedCardsInput ? forcedCardsInput.value : '';
+
+        // Si l'utilisateur n'a rien entré, on refuse de lancer (pas de cartes par défaut)
+        const trimmed = (forcedCardsText ?? '').trim();
+        if (!trimmed) {
+            showError('Tu dois choisir les cartes forcées avant de démarrer. Format: AS,10C,7H');
+            return;
+        }
+
+
+        const response = await fetch('/api/start', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ forcedCardsText })
+        });
+
         const data = await response.json();
+
+        if (!response.ok) {
+            showError(data.error || 'Erreur de validation des cartes forcées');
+            return;
+        }
+
         currentGameId = data.gameId;
         updateUI(data.state);
-        
+
         btnHit.disabled = false;
         btnStand.disabled = false;
         messageBoard.className = 'message hidden';
@@ -37,6 +79,7 @@ async function startNewGame() {
         console.error("Erreur lors du démarrage du jeu :", error);
     }
 }
+
 
 async function hit() {
     if (!currentGameId) return;
@@ -97,7 +140,7 @@ function createCardElement(card) {
 }
 
 function showMessage(status) {
-    messageBoard.classList.remove('hidden', 'win', 'lose', 'tie');
+    messageBoard.classList.remove('hidden', 'win', 'lose', 'tie', 'error');
     
     if (status === 'playerWon') {
         messageBoard.textContent = "Vous avez gagné ! 🎉";
@@ -111,10 +154,38 @@ function showMessage(status) {
     }
 }
 
+function showError(message) {
+    messageBoard.classList.remove('hidden', 'win', 'lose', 'tie');
+    messageBoard.classList.add('error');
+    messageBoard.textContent = message;
+    btnHit.disabled = true;
+    btnStand.disabled = true;
+}
+
+
 // Écouteurs d'événements
 btnNewGame.addEventListener('click', startNewGame);
 btnHit.addEventListener('click', hit);
 btnStand.addEventListener('click', stand);
 
-// Lancer une partie au chargement initial
-startNewGame();
+// Désactiver hit/stand tant qu'aucune partie n'a été lancée
+btnHit.disabled = true;
+btnStand.disabled = true;
+
+
+// Ne pas lancer automatiquement : l'utilisateur doit choisir les cartes et cliquer "Nouvelle Partie".
+// startNewGame();
+
+const btnSaveForced = document.getElementById('btn-save-forced');
+if (btnSaveForced && forcedCardsInput) {
+    btnSaveForced.addEventListener('click', () => {
+        try {
+            localStorage.setItem(forcedCardsStorageKey, forcedCardsInput.value ?? '');
+            showMessage('Choix sauvegardé ✅');
+        } catch (e) {
+            showError('Impossible de sauvegarder vos choix dans le navigateur.');
+        }
+    });
+}
+
+

@@ -17,27 +17,52 @@ export class BlackjackGame {
     public dealerHand: Card[] = [];
     public status: GameStatus = 'playing';
 
-    constructor() {
+    private forcedDrawOrder: Card[];
+
+    constructor(forcedCards?: Card[]) {
+        this.forcedDrawOrder = forcedCards ? [...forcedCards] : [];
         this.initializeDeck();
         this.dealInitialCards();
     }
 
-    // Crée et mélange le paquet de 52 cartes
+
+    // Crée et mélange le paquet de 52 cartes (en respectant une séquence forcée optionnelle)
     private initializeDeck() {
         const suits: Suit[] = ['Cœurs', 'Carreaux', 'Trèfles', 'Piques'];
         const ranks: Rank[] = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
-        
+
+        const fullDeck: Card[] = [];
         for (const suit of suits) {
             for (const rank of ranks) {
-                this.deck.push({ suit, rank });
+                fullDeck.push({ suit, rank });
             }
         }
-        // Mélange de Fisher-Yates
-        for (let i = this.deck.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [this.deck[i], this.deck[j]] = [this.deck[j], this.deck[i]];
+
+        // Retirer du paquet les cartes forcées (pour éviter les doublons impossibles)
+        // Comparaison stricte suit+rank.
+        const forcedToRemove = [...this.forcedDrawOrder];
+        const remainingDeck: Card[] = [];
+        for (const card of fullDeck) {
+            const idx = forcedToRemove.findIndex(f => f.suit === card.suit && f.rank === card.rank);
+            if (idx >= 0) {
+                forcedToRemove.splice(idx, 1);
+            } else {
+                remainingDeck.push(card);
+            }
         }
+
+        // Mélanger les cartes restantes
+        for (let i = remainingDeck.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [remainingDeck[i], remainingDeck[j]] = [remainingDeck[j], remainingDeck[i]];
+        }
+
+        // IMPORTANT : drawCard() fait deck.pop(), donc pour obtenir un ordre exact des tirages,
+        // on place les cartes forcées à la fin du tableau dans l'ordre attendu.
+        // Exemple : forcedDrawOrder = [tirage1, tirage2] => deck = [...random..., tirage1, tirage2]
+        this.deck = [...remainingDeck, ...this.forcedDrawOrder];
     }
+
 
     // Distribution initiale : 2 cartes chacun
     private dealInitialCards() {
