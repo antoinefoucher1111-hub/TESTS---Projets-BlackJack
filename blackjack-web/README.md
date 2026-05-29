@@ -1,3 +1,85 @@
+# Blackjack Web
+
+Ce projet est un jeu de Blackjack full-stack utilisant Node.js, Express, TypeScript pour le backend, et HTML/CSS/JavaScript vanilla pour le frontend.
+
+## Objectif
+
+Ce README guide un collaborateur pour cloner ou pull le projet depuis GitHub et l'ouvrir dans Visual Studio Code.
+
+## 1. Récupérer le projet depuis GitHub
+
+Si le projet n'est pas encore présent localement, clonez-le depuis GitHub :
+
+```bash
+git clone <URL_DU_DEPOT_GITHUB>
+```
+
+Remplacez `<URL_DU_DEPOT_GITHUB>` par l'adresse HTTPS ou SSH de votre dépôt.
+
+## 2. Ouvrir le projet dans Visual Studio Code
+
+1. Ouvrez Visual Studio Code.
+2. Cliquez sur `Fichier > Ouvrir un dossier...`.
+3. Sélectionnez le dossier `blackjack-web` cloné.
+
+Alternativement, ouvrez VS Code depuis un terminal :
+
+```bash
+cd blackjack-web
+code .
+```
+
+## 3. Mettre à jour depuis GitHub
+
+Si le dépôt existe déjà localement, récupérez les dernières modifications :
+
+```bash
+git pull origin main
+```
+
+Remplacez `main` par la branche par défaut du dépôt si nécessaire.
+
+## 4. Installer les dépendances
+
+Depuis le dossier du projet :
+
+```bash
+npm install
+```
+
+## 5. Lancer le serveur de développement
+
+Pour démarrer le backend TypeScript :
+
+```bash
+npx ts-node src/server.ts
+```
+
+Ensuite, ouvrez votre navigateur sur :
+
+```text
+http://localhost:3000
+```
+
+## 6. Notes utiles
+
+- Le projet contient :
+  - `src/server.ts` : serveur Express
+  - `src/game.ts` : logique du Blackjack
+  - `public/index.html` : interface utilisateur
+  - `public/style.css` : styles
+  - `public/app.js` : logique client
+- Si vous modifiez le backend, redémarrez le serveur pour appliquer les changements.
+- Pour vérifier l'état Git, utilisez :
+
+```bash
+git status
+```
+
+## 7. Contacts
+
+Pour toute question ou si vous avez besoin d'aide, contactez votre équipe ou l'auteur du projet.
+
 Prompt w/ Gemini : 
 
 Utilisateur : "Je veux un logiciel complet sur un jeu de black jack complet en langage typescript sur la partie back du js sur la partie front type application web http avec accès avec navigateur web. Donne moi les codes complets avec annotations de A à Z avec vs code"
